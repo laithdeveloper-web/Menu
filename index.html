@@ -639,12 +639,12 @@
             to { opacity: 1; }
         }
 
-        /* ===== الهيدر الاحترافي المحسّن والمصغر (فقط التعديلات هنا) ===== */
+        /* ===== الهيدر الأصلي الجميل (بدون أسهم) ===== */
         .header {
             width: 100%;
             z-index: 1000;
-            border-bottom: 4px solid var(--pure-white);
-            box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.5), 0 0 0 2px rgba(255, 255, 255, 0.4) inset;
+            border-bottom: 5px solid var(--pure-white);
+            box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.6), 0 0 0 2px rgba(255, 255, 255, 0.5) inset;
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
@@ -652,8 +652,7 @@
             overflow: hidden;
             background: linear-gradient(145deg, #2d6827, #4f9442, #7cb86b);
             backdrop-filter: blur(4px);
-            border-radius: 0 0 30px 30px;
-            padding-bottom: 4px;
+            border-radius: 0 0 45px 45px;
         }
 
         .header-video {
@@ -683,30 +682,29 @@
             z-index: 2;
             width: 100%;
             display: flex;
-            flex-direction: row; /* صف أفقي لتصغير الارتفاع */
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 8px 12px 4px;
-            gap: 8px;
+            padding: 18px 18px 8px;
         }
 
         .logo-circle {
-            width: 55px;
-            height: 55px;
+            width: 85px;
+            height: 85px;
             border-radius: 50%;
             overflow: hidden;
             background: transparent;
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 0 30px #ffffff, 0 0 50px #f0fff0, 0 3px 12px rgba(0,0,0,0.3);
-            border: 3px solid #ffffff;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            flex-shrink: 0;
+            margin-bottom: 10px;
+            box-shadow: 0 0 45px #ffffff, 0 0 90px #f0fff0, 0 5px 20px rgba(0,0,0,0.3);
+            border: 5px solid #ffffff;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
         }
         .logo-circle:hover {
-            transform: scale(1.05) rotate(2deg);
-            box-shadow: 0 0 50px #ffffff, 0 0 80px #b5e5a0;
+            transform: scale(1.08) rotate(3deg);
+            box-shadow: 0 0 70px #ffffff, 0 0 120px #b5e5a0;
         }
 
         .logo-circle img {
@@ -719,78 +717,51 @@
 
         .restaurant-name {
             font-family: 'Tajawal', sans-serif;
-            font-size: 1.4em; /* مصغر */
+            font-size: 2em;
+            margin-bottom: 5px;
             color: white;
-            text-shadow: 0 0 15px #ffffff, 0 0 30px #ffffff, 2px 2px 0 rgba(0,0,0,0.2);
+            text-shadow: 0 0 20px #ffffff, 0 0 40px #ffffff, 3px 3px 0 rgba(0,0,0,0.3);
             animation: titlePulse 2.5s infinite alternate ease-in-out;
             line-height: 1.2;
             text-align: center;
         }
 
         @keyframes titlePulse {
-            from { transform: scale(1); text-shadow: 0 0 15px #ffffff, 0 0 30px #ffffff; }
-            to { transform: scale(1.02); text-shadow: 0 0 25px #ffffff, 0 0 50px #f0fff0; }
+            from { transform: scale(1); text-shadow: 0 0 25px #ffffff, 0 0 45px #ffffff; }
+            to { transform: scale(1.02); text-shadow: 0 0 35px #ffffff, 0 0 70px #f0fff0; }
         }
 
         .restaurant-name small {
             font-size: 0.5em;
             color: var(--sandy-beige);
             display: block;
-            text-shadow: 0 0 10px black;
-            letter-spacing: 1px;
+            text-shadow: 0 0 15px black;
+            letter-spacing: 1.5px;
         }
 
-        /* ===== شريط التبويبات المحسن والمصغر ===== */
-        .nav-tabs-container {
-            position: relative;
-            width: calc(100% - 20px);
-            margin: 4px 10px 6px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .nav-scroll-btn {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.9);
-            border: 2px solid #ffffff;
-            color: #1f4a1a;
-            font-size: 1em;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: var(--transition-smooth);
-            box-shadow: 0 3px 8px rgba(0,0,0,0.2);
-            flex-shrink: 0;
-            z-index: 10;
-        }
-        .nav-scroll-btn:active { transform: scale(0.9); background: white; }
-        .nav-scroll-btn.hidden { opacity: 0; pointer-events: none; }
-
+        /* شريط التبويبات بدون أسهم (كما كان) */
         .nav-tabs {
             display: flex;
-            justify-content: flex-start;
+            justify-content: center;
+            flex-wrap: nowrap;
             overflow-x: auto;
-            scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch;
+            width: 100%;
+            padding: 12px 12px 10px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border-top: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: inset 0 5px 15px rgba(0, 0, 0, 0.05), 0 4px 12px rgba(0, 0, 0, 0.2);
+            gap: 12px;
+            position: relative;
+            z-index: 2;
             scrollbar-width: thin;
             scrollbar-color: #ffffff #F5E6D3;
-            gap: 8px;
-            padding: 8px 5px;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(12px);
-            border-top: 1px solid rgba(255, 255, 255, 0.8);
-            box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.05), 0 3px 8px rgba(0, 0, 0, 0.15);
-            border-radius: 40px;
-            flex: 1;
-            touch-action: pan-x;
-            overscroll-behavior: contain;
+            border-radius: 50px 50px 30px 30px;
+            margin: 0 16px 8px;
+            width: calc(100% - 32px);
         }
         .nav-tabs::-webkit-scrollbar {
-            height: 5px;
+            height: 6px;
         }
         .nav-tabs::-webkit-scrollbar-track {
             background: var(--sandy-beige);
@@ -805,18 +776,18 @@
             background: linear-gradient(145deg, #ffffff, #f8f9fa);
             border: 2px solid transparent;
             cursor: pointer;
-            padding: 6px 16px;
+            padding: 10px 22px;
             font-family: 'Cairo', sans-serif;
-            font-size: 0.9em;
+            font-size: 1em;
             color: #2b4d24;
             font-weight: 800;
-            border-radius: 40px;
+            border-radius: var(--btn-radius);
             transition: var(--transition-smooth);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            gap: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
             white-space: nowrap;
             flex: 0 0 auto;
             position: relative;
@@ -835,24 +806,24 @@
         .nav-tab:hover::before {
             left: 100%;
         }
-        .nav-tab:active { transform: scale(0.95); }
+        .nav-tab:active { transform: scale(0.96); }
         .nav-tab:hover {
             color: #1f4a1a;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            transform: translateY(-4px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
             border-color: #ffffff;
         }
         .nav-tab.active {
             background: linear-gradient(145deg, #3f8b3a, #7cb86b, #b3e6a0);
             color: var(--pure-white);
-            box-shadow: 0 8px 20px rgba(45, 90, 39, 0.8), 0 10px 25px rgba(45, 90, 39, 0.5);
-            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(45, 90, 39, 0.9), 0 15px 35px rgba(45, 90, 39, 0.6);
+            transform: translateY(-4px);
             border: 2px solid var(--pure-white);
-            text-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+            text-shadow: 0 0 15px rgba(0, 0, 0, 0.9);
         }
-        .nav-tab.active i { filter: drop-shadow(0 0 5px rgba(255, 255, 255, 1)); }
+        .nav-tab.active i { filter: drop-shadow(0 0 8px rgba(255, 255, 255, 1)); }
         .nav-tab i {
-            font-size: 1.1em;
+            font-size: 1.3em;
             color: inherit;
             transition: transform .3s ease;
         }
@@ -1522,13 +1493,6 @@
                 font-size: 1.2em;
                 margin-bottom: 4px;
             }
-            .nav-tab {
-                padding: 5px 12px;
-                font-size: 0.85em;
-            }
-            .nav-tab i {
-                font-size: 1em;
-            }
         }
     </style>
 </head>
@@ -1615,12 +1579,8 @@
             </h1>
         </div>
         
-        <!-- شريط التبويبات المحسّن مع أزرار التمرير -->
-        <div class="nav-tabs-container">
-            <button class="nav-scroll-btn" id="scrollLeftBtn" aria-label="التمرير لليسار"><i class="fas fa-chevron-right"></i></button>
-            <div class="nav-tabs" id="navTabs"></div>
-            <button class="nav-scroll-btn" id="scrollRightBtn" aria-label="التمرير لليمين"><i class="fas fa-chevron-left"></i></button>
-        </div>
+        <!-- شريط التبويبات الأصلي بدون أسهم -->
+        <div class="nav-tabs" id="navTabs"></div>
     </header>
 
     <main class="menu-container" id="menuContainer"></main>
@@ -1783,41 +1743,6 @@
             loadMenuData();
         });
 
-        function updateScrollButtons() {
-            const navTabs = document.getElementById('navTabs');
-            const leftBtn = document.getElementById('scrollLeftBtn');
-            const rightBtn = document.getElementById('scrollRightBtn');
-            if (!navTabs) return;
-            
-            const scrollLeft = navTabs.scrollLeft;
-            const maxScroll = navTabs.scrollWidth - navTabs.clientWidth;
-            
-            leftBtn.classList.toggle('hidden', scrollLeft <= 5);
-            rightBtn.classList.toggle('hidden', scrollLeft >= maxScroll - 5);
-        }
-
-        function scrollNav(direction) {
-            const navTabs = document.getElementById('navTabs');
-            if (!navTabs) return;
-            const scrollAmount = 200; // بكسل
-            navTabs.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
-            setTimeout(updateScrollButtons, 200);
-        }
-
-        function initNavScroll() {
-            const navTabs = document.getElementById('navTabs');
-            const leftBtn = document.getElementById('scrollLeftBtn');
-            const rightBtn = document.getElementById('scrollRightBtn');
-            
-            if (navTabs) {
-                navTabs.addEventListener('scroll', updateScrollButtons);
-                setTimeout(updateScrollButtons, 100);
-            }
-            if (leftBtn) leftBtn.addEventListener('click', () => scrollNav(-1));
-            if (rightBtn) rightBtn.addEventListener('click', () => scrollNav(1));
-            window.addEventListener('resize', updateScrollButtons);
-        }
-
         async function loadMenuData() {
             try {
                 const response = await fetch(`${NEW_API_URL}?action=getMenuData`);
@@ -1834,7 +1759,6 @@
                     } else {
                         document.getElementById('menuContainer').innerHTML = '<div class="empty-state">لا توجد أصناف متاحة حالياً</div>';
                     }
-                    initNavScroll();
                 } else {
                     console.error('فشل تحميل البيانات');
                 }
@@ -1868,7 +1792,6 @@
             document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
             element.classList.add('active');
             renderProducts(catId);
-            setTimeout(updateScrollButtons, 100);
         }
 
         function isMojitoProduct(productId) {
