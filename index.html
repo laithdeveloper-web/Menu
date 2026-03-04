@@ -870,7 +870,6 @@
 
         .product-card {
             position: relative;
-            /* تمت إزالة صورة الخلفية وإضافة خلفية بيضاء ناعمة */
             background-color: #fefefe;
             border-radius: 24px;
             overflow: hidden;
@@ -883,7 +882,6 @@
             padding: 8px;
         }
 
-        /* إزالة الـ overlay لأنه لم يعد ضرورياً مع الخلفية البيضاء */
         .product-card::before {
             display: none;
         }
@@ -1492,6 +1490,27 @@
                 font-size: 0.9em;
             }
         }
+
+        /* ===== مؤشر التحميل المتحسن ===== */
+        .loading-spinner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 200px;
+            width: 100%;
+        }
+        .loading-spinner::after {
+            content: '';
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255,255,255,0.3);
+            border-top-color: #ffffff;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -1581,7 +1600,9 @@
         <div class="nav-tabs" id="navTabs"></div>
     </header>
 
-    <main class="menu-container" id="menuContainer"></main>
+    <main class="menu-container" id="menuContainer">
+        <div class="loading-spinner"></div>
+    </main>
 
     <!-- مودال عرض الصورة -->
     <div class="image-modal" id="imageModal" onclick="closeImageModal(event)">
@@ -1678,9 +1699,11 @@
             });
         })();
 
+        // تحسين إنشاء الأوراق: تقليل العدد لتحسين الأداء
         function createLeaves() {
             const leavesContainer = document.getElementById('fallingLeaves');
-            const leafCount = 15; // تم التخفيض لتحسين الأداء
+            if (!leavesContainer) return;
+            const leafCount = 12; // تم التخفيض أكثر
             for (let i = 0; i < leafCount; i++) {
                 const leaf = document.createElement('div');
                 leaf.className = 'leaf';
@@ -1731,6 +1754,29 @@
             'ايس سبانيش لاتيه'
         ];
 
+        // محاولة تحميل البيانات المخزنة محلياً
+        function loadCachedData() {
+            try {
+                const cached = localStorage.getItem('telalsindian_menu');
+                if (cached) {
+                    const data = JSON.parse(cached);
+                    if (data.categories && data.products) {
+                        categories = data.categories;
+                        products = data.products;
+                        categories.sort((a, b) => (a.order || 0) - (b.order || 0));
+                        renderCategories();
+                        if (categories.length > 0) {
+                            renderProducts(categories[0].id);
+                        }
+                        return true;
+                    }
+                }
+            } catch (e) {
+                console.warn('فشل تحميل البيانات المخزنة', e);
+            }
+            return false;
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             createLeaves();
 
@@ -1738,18 +1784,36 @@
                 document.getElementById('intro-screen').classList.add('hidden');
             }, 4000);
             
+            // محاولة التحميل من الكاش أولاً
+            if (!loadCachedData()) {
+                // إذا لم يكن هناك كاش، نظهر التحميل ثم نجلب البيانات
+                document.getElementById('menuContainer').innerHTML = '<div class="loading-spinner"></div>';
+            }
             loadMenuData();
         });
 
         async function loadMenuData() {
+            // مهلة للطلب: 8 ثوانٍ فقط
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 8000);
+
             try {
-                const response = await fetch(`${NEW_API_URL}?action=getMenuData`);
+                const response = await fetch(`${NEW_API_URL}?action=getMenuData`, { signal: controller.signal });
+                clearTimeout(timeoutId);
                 const data = await response.json();
                 if (data.success) {
                     categories = data.categories || [];
                     products = data.products || [];
                     
                     categories.sort((a, b) => (a.order || 0) - (b.order || 0));
+                    
+                    // تخزين في localStorage
+                    try {
+                        localStorage.setItem('telalsindian_menu', JSON.stringify({
+                            categories: categories,
+                            products: products
+                        }));
+                    } catch (e) { /* تجاهل */ }
                     
                     renderCategories();
                     if (categories.length > 0) {
@@ -1759,9 +1823,20 @@
                     }
                 } else {
                     console.error('فشل تحميل البيانات');
+                    showNotification('فشل تحميل القائمة، استخدم البيانات المخزنة', 'error');
+                    // إذا فشل التحميل ولم تكن هناك بيانات مخزنة مسبقاً، نظهر رسالة
+                    if (!categories.length) {
+                        document.getElementById('menuContainer').innerHTML = '<div style="text-align:center; color:white;">تعذر تحميل القائمة. تحقق من اتصالك بالإنترنت.</div>';
+                    }
                 }
             } catch (error) {
+                clearTimeout(timeoutId);
                 console.error('خطأ في الاتصال بالسيرفر الجديد:', error);
+                showNotification('مشكلة في الاتصال، استخدم البيانات المحفوظة', 'error');
+                // إذا لم تكن هناك بيانات مخزنة، نظهر رسالة
+                if (!categories.length) {
+                    document.getElementById('menuContainer').innerHTML = '<div style="text-align:center; color:white;">لا يمكن تحميل القائمة حالياً.<br>يرجى التحقق من الاتصال بالإنترنت.</div>';
+                }
             }
         }
 
@@ -2136,12 +2211,19 @@
                 formData.append('action', 'saveOrder');
                 formData.append('data', JSON.stringify(orderData));
                 
+                // مهلة للطلب
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 10000);
+                
                 await fetch(OLD_API_URL, {
                     method: 'POST',
                     mode: 'no-cors',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: formData
+                    body: formData,
+                    signal: controller.signal
                 });
+                
+                clearTimeout(timeoutId);
                 
                 showNotification('✅ تم إرسال الطلب بنجاح!', 'success');
                 
@@ -2155,7 +2237,7 @@
                 
             } catch (error) {
                 console.error('Order submission error:', error);
-                showNotification('❌ حدث خطأ في إرسال الطلب', 'error');
+                showNotification('❌ حدث خطأ في إرسال الطلب. تحقق من اتصالك.', 'error');
                 
                 const submitBtn = event.target.querySelector('button[type="submit"]');
                 submitBtn.textContent = 'تأكيد الطلب';
