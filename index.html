@@ -739,14 +739,18 @@
             letter-spacing: 1.5px;
         }
 
-        /* شريط التبويبات المحسّن (أصغر حجماً وأكثر احترافية) */
+        /* شريط التبويبات المحسّن (أصغر حجماً وأكثر احترافية) - تم حل مشكلة التمرير */
         .nav-tabs {
             display: flex;
-            justify-content: center;
+            justify-content: flex-start; /* تغيير من center إلى flex-start لبدء التمرير من اليمين */
             flex-wrap: nowrap;
             overflow-x: auto;
-            width: 100%;
-            padding: 8px 12px 6px;
+            -webkit-overflow-scrolling: touch; /* تمرير سلس على iOS */
+            scrollbar-width: thin;
+            scrollbar-color: #ffffff #F5E6D3;
+            width: calc(100% - 32px);
+            padding: 8px 16px 6px; /* زيادة padding قليلاً لإعطاء مساحة للتمرير */
+            margin: 0 16px 8px;
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(15px);
             border-top: 1px solid rgba(255, 255, 255, 0.8);
@@ -754,11 +758,8 @@
             gap: 6px;
             position: relative;
             z-index: 2;
-            scrollbar-width: thin;
-            scrollbar-color: #ffffff #F5E6D3;
             border-radius: 40px 40px 25px 25px;
-            margin: 0 16px 8px;
-            width: calc(100% - 32px);
+            direction: rtl; /* تأكيد الاتجاه */
         }
         .nav-tabs::-webkit-scrollbar {
             height: 4px;
@@ -789,7 +790,7 @@
             gap: 4px;
             box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1);
             white-space: nowrap;
-            flex: 0 0 auto;
+            flex: 0 0 auto; /* منع العناصر من الانكماش */
             position: relative;
             overflow: hidden;
         }
@@ -1596,7 +1597,7 @@
             </h1>
         </div>
         
-        <!-- شريط التبويبات المحسّن (أصغر وأكثر احترافية) -->
+        <!-- شريط التبويبات المحسّن (أصغر وأكثر احترافية) - مع تمرير كامل -->
         <div class="nav-tabs" id="navTabs"></div>
     </header>
 
